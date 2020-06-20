@@ -5,5 +5,5 @@ module.exports = app => {
 
     api(app);
     html(app);
-    
+
 }
