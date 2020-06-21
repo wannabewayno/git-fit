@@ -5,26 +5,31 @@ const db = require('../../models');
 module.exports = app => {
 
     app.get('/api/workouts', (req,res) => {
-        console.log(`get /api/workouts`)
-        res.json();
-        res.status(200);
+        db.Workout.find({})
+        .then(results => {
+            console.log(results);
+            res.json(results).status(200);
+        });
     });
 
     app.post('/api/workouts', (req,res) => {
+        console.log(req.body);
         console.log(`post /api/workouts`);
-        res.json();
+        res.json({message:'POST REQUEST api/workouts'});
         res.status(200)
     });
 
     app.put('/api/workouts/:id', (req,res) => {
+        console.log(req.params.id);
         console.log(`put /api/workouts`);
-        res.json();
+        res.json({message:'PUT response from api/workouts/'});
         res.status(200)
     });
 
     app.get('/api/workouts/range', (req,res) => {
+        console.log(req.params);
         console.log(`get /api/workouts/range`);
-        res.json();
+        res.json({message:'hitting api/workouts/range'});
         res.status(200)
     });
 
