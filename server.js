@@ -26,9 +26,9 @@ app.use(express.json())
 app.use(express.static('public'));
 
 
-// set up the mongoDB connecition
+// 
 // ==============================================================================
-const connection = require('./config/connection.config');
+
 
 
 // routes 
@@ -37,7 +37,16 @@ const routes = require ('./routes');
 routes(app);
 
 
-// starts our server
+// start our server
 // ==============================================================================
-app.listen(PORT,() => console.log(`APP STARTED - available at http://localhost:${3141}`));
+
+//set up the mongoDB connecition
+const connection = require('./config/connection.config');
+
+connection
+.then(connected => { // if connected start server
+    app.listen(PORT,() => console.log(`APP STARTED - available at http://localhost:${3141}`));
+})
+.catch(error => console.log(error));
+
 

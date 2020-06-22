@@ -10,6 +10,7 @@ mongoose.connect("mongodb://localhost/workout", {
 let workoutSeed = [
   {
     day: new Date().setDate(new Date().getDate()-10),
+    totalDuration:20,
     exercises: [
       {
         type: "resistance",
@@ -23,6 +24,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-9),
+    totalDuration:20,
     exercises: [
       {
         type: "resistance",
@@ -36,6 +38,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-8),
+    totalDuration:25,
     exercises: [
       {
         type: "resistance",
@@ -49,6 +52,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-7),
+    totalDuration:25,
     exercises: [
       {
         type: "cardio",
@@ -60,6 +64,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-6),
+    totalDuration:20,
     exercises: [
       {
         type: "resistance",
@@ -73,6 +78,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-5),
+    totalDuration:20,
     exercises: [
       {
         type: "resistance",
@@ -86,6 +92,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-4),
+    totalDuration:30,
     exercises: [
       {
         type: "resistance",
@@ -99,6 +106,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-3),
+    totalDuration:20,
     exercises: [
       {
         type: "resistance",
@@ -112,6 +120,7 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-2),
+    totalDuration:20,
     exercises: [
       {
         type: "resistance",
@@ -125,12 +134,21 @@ let workoutSeed = [
   },
   {
     day: new Date().setDate(new Date().getDate()-1),
+    totalDuration:50,
     exercises: [
       {
         type: "resistance",
         name: "Bench",
         duration: 30,
         distance: 2
+      },
+      {
+        type: "resistance",
+        name: "Bicep Curl",
+        duration: 20,
+        weight: 100,
+        reps: 10,
+        sets: 4
       }
     ]
   }

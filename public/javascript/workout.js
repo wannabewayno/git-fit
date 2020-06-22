@@ -21,6 +21,13 @@
   }
 
   function tallyExercises(exercises) {
+    if (exercises.length === 1) {
+      if (exercises[0].type === 'resistance') {
+        return { totalWeight: exercises[0].weight, totalSets: exercises[0].sets, totalReps: exercises[0].reps };
+      } else {
+        return { totalDistance: exercises[0].distance };
+      }
+    }
     const tallied = exercises.reduce((acc, curr) => {
       if (curr.type === "resistance") {
         acc.totalWeight = (acc.totalWeight || 0) + curr.weight;
@@ -31,6 +38,7 @@
       }
       return acc;
     }, {});
+    console.log(tallied);
     return tallied;
   }
 
@@ -46,6 +54,7 @@
   }
 
   function renderWorkoutSummary(summary) {
+    console.log(summary);
     const container = document.querySelector(".workout-stats");
 
     const workoutKeyMap = {
