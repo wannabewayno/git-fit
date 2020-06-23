@@ -35,7 +35,7 @@ function populateChart(data) {
   const exerciseDurations = durationObj.value;
 
   const resistanceObj     = extractTotalsPerExercise(data,'weight');
-  const resistanceNames     = resistanceObj.name;
+  const resistanceNames   = resistanceObj.name;
   const resistanceWeights = resistanceObj.value;
 
   const colors  = generatePalette();
@@ -192,7 +192,7 @@ function combine(daysOfTheWeek,callBack){
   return (day,index,array) => {
     return daysOfTheWeek[day]
     .map(callBack)
-    .reduce((accumulator, currentValue) => accumulator + currentValue )
+    .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
   }
 }
 
@@ -259,7 +259,7 @@ function extractTotalsPerDay(data, dataType) {
 }
 
 function extractTotalsPerExercise(data, dataType){
-  console.log(data);
+
   const exercisesObj = {};
 
   switch(dataType){
@@ -289,7 +289,6 @@ function extractTotalsPerExercise(data, dataType){
       });
     break;
   }
-  console.log(exercisesObj);
 
   // separate the key-value pairs into arrays to pass to the chart object
   const exerciseTotals = {

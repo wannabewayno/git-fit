@@ -4,7 +4,8 @@ const connection = mongoose.connect(
         process.env.MONGODB_URI || "mongodb://localhost/workout",
         { 
             useNewUrlParser: true,
-            useFindAndModify:false
+            useFindAndModify: false,
+            useUnifiedTopology: true,
         }
     );
 
