@@ -1,16 +1,10 @@
 // get all workout data from back-end
 
+// const api = require("../../routes/api");
+
 // module.exports = function() {
-    fetch("/api/workouts/range")
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      populateChart(data);
-    });
-
-
-  // API.getWorkoutsInRange()
+    API.getWorkoutsInRange()
+    .then(data => populateChart(data) )
 
     function generatePalette() {
       const arr = [
@@ -35,6 +29,7 @@
     return arr;
     }
   function populateChart(data) {
+    console.log(data);
     let durations = duration(data);
     let pounds = calculateTotalWeight(data);
     let workouts = workoutNames(data);
