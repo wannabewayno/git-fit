@@ -1,16 +1,22 @@
-const mongoose = require("mongoose");
-const Resistance = require("./Resistance.exercise");
+const mongoose = require('mongoose');
+const Resistance = require('./Resistance');
+const Cardio = require('./Cardio');
 const Schema = mongoose.Schema;
+
+// Schema
+// ==============================================================================
 
 const WorkoutSchema = new Schema({
 
     day: { type:Date, default: new Date().setDate( new Date().getDate() ) },
-    totalDuration:Number,
-    exercises: [require('./exercise.schema')],
+    totalDuration:{type: Number,},
+    exercises: { type: Array,},
 
 });
 
-WorkoutSchema.methods.calculateDuration = function(){
+// Instance Methods
+// ==============================================================================
+WorkoutSchema.methods.calculateTotalDuration = function(){
     let duration = 0;
     this.exercises.forEach(exercise => {
         duration += exercise.duration;
@@ -19,17 +25,21 @@ WorkoutSchema.methods.calculateDuration = function(){
     return this.totalDuration;
 }
 
-WorkoutSchema.methods.addExercises = function(exercises) {
+WorkoutSchema.methods.addExercise = function(exercise) {
 
-    // maps exercises object to Exercise class
-    exercises.map(exercise => {
-        new Resistance(exercise)
-    });
+    // creates a new exercise object
+    if (exercise.type === 'resistance' ) {
+        exercise = new Resistance(exercise);
+    }
+    if (exercise.type === 'cardio') {
+        exercise = new Cardio(exercise);
+    }
 
-    // sets exercises to our workout
-    this.Exercises.push(exercises)
-    // returns these exercises to the caller
-    return this.Exercises;
+    // add exercise to our workout
+    this.exercises.push(exercise)
+
+    // returns the exercise to the caller
+    return this.exercises;
 }
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
