@@ -27,18 +27,20 @@ function generatePalette() {
 }
 
 function populateChart(data) {
-  let durationPerDay  = extractTotals(data, "duration");
-  let weightPerDay    = extractTotals(data, "weight"  );
-  let cardioNames     = extractTotals(data, 'name-cardio');
-  let resistanceNames = extractTotals(data,'name-resistance');
+  const durationPerDay    = extractTotalsPerDay(data, "duration");
+  const weightPerDay      = extractTotalsPerDay(data, "weight"  );
+  const ExerciseNames     = extractTotalsPerExercise(data, 'name');
+  const ExerciseDurations = extractTotalPerExercise(data, 'duration');
+  const resistanceNames   = extractTotals(data,'name-resistance');
+  const resistanceWeights = extractTotals(data,'weight');
   const colors  = generatePalette();
 
-  let line = document.querySelector("#canvas").getContext("2d");
-  let bar = document.querySelector("#canvas2").getContext("2d");
-  let pie = document.querySelector("#canvas3").getContext("2d");
-  let pie2 = document.querySelector("#canvas4").getContext("2d");
+  const line = document.querySelector("#canvas").getContext("2d");
+  const bar = document.querySelector("#canvas2").getContext("2d");
+  const pie = document.querySelector("#canvas3").getContext("2d");
+  const doughnut = document.querySelector("#canvas4").getContext("2d");
 
-  let lineChart = new Chart(line, {
+  const lineChart = new Chart(line, {
     type: "line",
     data: {
       labels: [
@@ -86,7 +88,7 @@ function populateChart(data) {
     }
   });
 
-  let barChart = new Chart(bar, {
+  const barChart = new Chart(bar, {
     type: "bar",
     data: {
       labels: [
@@ -139,13 +141,13 @@ function populateChart(data) {
     }
   });
 
-  let pieChart = new Chart(pie, {
+  const pieChart = new Chart(pie, {
     type: "pie",
     data: {
       labels: cardioNames,
       datasets: [
         {
-          label: "Exercises Performed",
+          label: "Time Per Exercise",
           backgroundColor: colors,
           data: durations
         }
@@ -159,13 +161,13 @@ function populateChart(data) {
     }
   });
 
-  let donutChart = new Chart(pie2, {
+  const donutChart = new Chart(doughnut, {
     type: "doughnut",
     data: {
       labels: resistanceNames,
       datasets: [
         {
-          label: "Exercises Performed",
+          label: "Weight lifted Per Exercise",
           backgroundColor: colors,
           data: pounds
         }
@@ -213,7 +215,7 @@ function weightCB(workout,index,array){
  * @param  {String} option - a string describing the type of data to extract
  * @return {Array<Number>} - returns combined total per day
  */
-function extractTotals(data, dataType) {
+function extractTotalsPerDay(data, dataType) {
   let daysOfTheWeek = {
     "0":[],
     "1":[],
@@ -249,4 +251,8 @@ function extractTotals(data, dataType) {
       break;
   }
   return extractedData;
+}
+
+function extractTotalPerExercise(){
+
 }
