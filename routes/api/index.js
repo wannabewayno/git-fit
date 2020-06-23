@@ -50,7 +50,7 @@ module.exports = app => {
 
     app.get('/api/workouts/range', (req,res) => {
         db.Workout.find({
-            day: { $gte: new Date().setDate( new Date().getDate() - 7 )}
+            day: { $gte: new Date( new Date().setDate( new Date().getDate() - 8 ) ) }
         })
         .then(response => res.status(200).json(response) )
         .catch(error => console.log(error) )

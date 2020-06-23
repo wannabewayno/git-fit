@@ -183,13 +183,37 @@
   }
 
   function duration(data) {
-    let durations = [];
+    console.log(data);
+    let daysOfTheWeek = {
+      "0":[],
+      "1":[],
+      "2":[],
+      "3":[],
+      "4":[],
+      "5":[],
+      "6":[]
+    };
 
+    // sort all data into correspsonding day of the week
     data.forEach(workout => {
-      workout.exercises.forEach(exercise => {
-        durations.push(exercise.duration);
-      });
+      // Find the day
+      const day = new Date(Date.parse(workout.day)).getDay();
+      // add the workout to the corresponding day of the week
+      daysOfTheWeek[day].push(workout);
     });
+
+    // create duration placeholder
+    durations = [];
+    // combine the totalTime for each work out per day
+    for (day in daysOfTheWeek ) {
+      durations.push(
+        daysOfTheWeek[day]
+        .map(workout => workout.totalDuration)
+        .reduce((accumulator, currentValue) => accumulator + currentValue )
+      )
+    }
+    
+    console.log(durations);
 
     return durations;
   }
