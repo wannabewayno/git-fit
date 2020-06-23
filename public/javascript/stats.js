@@ -1,6 +1,5 @@
-// get all workout data from back-end
+// get all workout data from back-end;
 
-// const api = require("../../routes/api");
 
 // module.exports = function() {
     API.getWorkoutsInRange()
@@ -29,11 +28,10 @@
     return arr;
     }
   function populateChart(data) {
-    console.log(data);
-    let durations = duration(data);
-    let pounds = calculateTotalWeight(data);
-    let workouts = workoutNames(data);
-    const colors = generatePalette();
+    let durations = extractTotals(data, "duration");
+    let pounds    = extractTotals(data, "weight"  );
+    let workouts  = workoutNames(data);
+    const colors  = generatePalette();
 
     let line = document.querySelector("#canvas").getContext("2d");
     let bar = document.querySelector("#canvas2").getContext("2d");
@@ -182,8 +180,14 @@
     });
   }
 
-  function duration(data) {
-    console.log(data);
+  /**
+   * Sorts data by day of the week
+   * Then totals numeric data per day for the defined option passed to 'option' 
+   * @param  {Array<Object>}  data - An array of workout data 
+   * @param  {String} option - a string describing the type of data to extract
+   * @return {Array<Number>} - returns combined total per day
+   */
+  function extractTotals(data, option) {
     let daysOfTheWeek = {
       "0":[],
       "1":[],
@@ -202,32 +206,42 @@
       daysOfTheWeek[day].push(workout);
     });
 
-    // create duration placeholder
-    durations = [];
-    // combine the totalTime for each work out per day
-    for (day in daysOfTheWeek ) {
-      durations.push(
-        daysOfTheWeek[day]
-        .map(workout => workout.totalDuration)
-        .reduce((accumulator, currentValue) => accumulator + currentValue )
-      )
+    // placeholder for extracted data
+    extractedData = [];
+
+    switch (option) {
+      case 'duration':
+         for (day in daysOfTheWeek ) {
+          extractedData.push(
+            daysOfTheWeek[day]
+            .map(workout => workout.totalDuration)
+            .reduce((accumulator, currentValue) => accumulator + currentValue )
+          )
+        }
+        break;
+
+      case 'weight':
+        // combine the totalweight lifted for each day
+        // sets x reps x weight per exercise per workout
+        for (day in daysOfTheWeek ) {
+          extractedData.push(
+            daysOfTheWeek[day]
+            .map(workout => {
+              return workout.exercises.map(exercise => {
+                if (exercise.type === 'cardio') {
+                  return 0;
+                }
+                return exercise.sets*exercise.reps*exercise.weight;
+                })
+                .reduce((accumulator, currentValue) => accumulator + currentValue )
+            })
+            .reduce((accumulator, currentValue) => accumulator + currentValue )
+          )
+        }
+        break;
     }
-    
-    console.log(durations);
 
-    return durations;
-  }
-
-  function calculateTotalWeight(data) {
-    let total = [];
-
-    data.forEach(workout => {
-      workout.exercises.forEach(exercise => {
-        total.push(exercise.weight);
-      });
-    });
-
-    return total;
+    return extractedData;
   }
 
   function workoutNames(data) {

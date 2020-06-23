@@ -1,10 +1,11 @@
 // require dependencies
 const db = require('../../models');
-const { Mongoose } = require('mongoose');
 
 // pass the server instance through the API controller
 module.exports = app => {
 
+    // GET
+    // =================================
     app.get('/api/workouts', (req,res) => {
         db.Workout.find({})
         .then(results => {
@@ -13,6 +14,8 @@ module.exports = app => {
         .catch(error => res.status(501).json(error) );
     });
 
+    // POST
+    // =================================
     app.post('/api/workouts', (req,res) => {
         console.log(req.body);
         db.Workout.create(req.body)
@@ -20,6 +23,8 @@ module.exports = app => {
         .catch(error => res.status(422).json(error) );
     });
 
+    // PUT
+    // =================================
     app.put('/api/workouts/:id', async (req,res) => {
         // exercises to add
         const exercise = req.body;
@@ -48,7 +53,10 @@ module.exports = app => {
             res.status(422).json(error)} );
     });
 
+    // GET range
+    // =================================
     app.get('/api/workouts/range', (req,res) => {
+        // finds all workouts from today to a week ago
         db.Workout.find({
             day: { $gte: new Date( new Date().setDate( new Date().getDate() - 8 ) ) }
         })
