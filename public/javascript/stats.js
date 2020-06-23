@@ -29,10 +29,15 @@ function generatePalette() {
 function populateChart(data) {
   const durationPerDay    = extractTotalsPerDay(data, "duration");
   const weightPerDay      = extractTotalsPerDay(data, "weight"  );
-  const ExerciseNames     = extractTotalsPerExercise(data, 'name');
-  const ExerciseDurations = extractTotalPerExercise(data, 'duration');
-  const resistanceNames   = extractTotals(data,'name-resistance');
-  const resistanceWeights = extractTotals(data,'weight');
+
+  const durationObj       = extractTotalsPerExercise(data, 'duration');
+  const exerciseNames     = durationObj.name;
+  const exerciseDurations = durationObj.value;
+
+  const resistanceObj     = extractTotalsPerExercise(data,'weight');
+  const resistanceNames     = resistanceObj.name;
+  const resistanceWeights = resistanceObj.value;
+
   const colors  = generatePalette();
 
   const line = document.querySelector("#canvas").getContext("2d");
@@ -144,12 +149,12 @@ function populateChart(data) {
   const pieChart = new Chart(pie, {
     type: "pie",
     data: {
-      labels: cardioNames,
+      labels: exerciseNames,
       datasets: [
         {
           label: "Time Per Exercise",
           backgroundColor: colors,
-          data: durations
+          data: exerciseDurations
         }
       ]
     },
@@ -169,7 +174,7 @@ function populateChart(data) {
         {
           label: "Weight lifted Per Exercise",
           backgroundColor: colors,
-          data: pounds
+          data: resistanceWeights
         }
       ]
     },
@@ -253,6 +258,47 @@ function extractTotalsPerDay(data, dataType) {
   return extractedData;
 }
 
-function extractTotalPerExercise(){
+function extractTotalsPerExercise(data, dataType){
+  console.log(data);
+  const exercisesObj = {};
 
+  switch(dataType){
+    case 'duration':
+      data.forEach(workout => {
+        workout.exercises.forEach(exercise => {
+          if (exercisesObj[exercise.name]) {
+            exercisesObj[exercise.name] += exercise.duration;
+          } else {
+            exercisesObj[exercise.name] = exercise.duration;
+          }
+        });
+      });
+      break;
+    case'weight':
+      //code here
+      data.forEach(workout => {
+        workout.exercises.forEach(exercise => {
+          if (exercise.type === 'resistance') {
+            if (exercisesObj[exercise.name]) {
+              exercisesObj[exercise.name] += exercise.weight * exercise.sets * exercise.reps;
+            } else {
+              exercisesObj[exercise.name] = exercise.weight * exercise.sets * exercise.reps;
+            }
+          }
+        });
+      });
+    break;
+  }
+  console.log(exercisesObj);
+
+  // separate the key-value pairs into arrays to pass to the chart object
+  const exerciseTotals = {
+    name:[],
+    value:[],
+  };
+  for (exercise in exercisesObj) {
+    exerciseTotals.name.push(exercise);
+    exerciseTotals.value.push(exercisesObj[exercise]);
+  }
+  return exerciseTotals
 }
